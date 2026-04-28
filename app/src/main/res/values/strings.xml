@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">TaskMaster</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_activity_navdrawer">TaskMaster</string>
+    <string name="title_activity_task_dashboard">TaskMaster</string>
     <string name="nav_header_title">TaskMaster</string>
     <string name="nav_header_subtitle">Plan clearly. Finish calmly.</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Overview</string>
@@ -17,8 +14,6 @@
     <string name="update_tasks">Update tasks</string>
     <string name="delete_tasks">Delete tasks</string>
     <string name="custom_tasks">Add task</string>
-    <string name="title_activity_maps">MapsActivity</string>
-    <string name="drawer_primary_section">Workspace</string>
     <string name="drawer_secondary_section">Task actions</string>
     <string name="drawer_fab_hint">Jumping to add task</string>
     <string name="drawer_fab_description">Create a new task</string>
@@ -26,7 +21,6 @@
     <string name="splash_title">TaskMaster</string>
     <string name="splash_subtitle">Capture tasks, track what matters, and move through the day with less friction.</string>
     <string name="splash_loading">Preparing your workspace...</string>
-    <string name="sidebar_hint_title">Today\'s flow</string>
     <string name="sidebar_hint_body">Open Dashboard for your summary, Overview for recent items, and use Add task when something new lands on your plate.</string>
     <string name="home_title">Task dashboard</string>
     <string name="home_subtitle">Keep your day clear, visible, and easy to act on.</string>
@@ -54,8 +48,8 @@
     <string name="tips_card_one">Start on Dashboard to see your current focus and next reminder.</string>
     <string name="tips_card_two">Use Add task for quick capture, then open View tasks when you want to edit details.</string>
     <string name="tips_card_three">Review Overview when you want a fast snapshot of your latest items.</string>
-    <string name="add_task_title">Add or View task</string>
-    <string name="add_task_subtitle">Keep one simple form for planning. Use the task list screen when you want to review or delete items.</string>
+    <string name="add_task_title">Add task</string>
+    <string name="add_task_subtitle">Use this screen to capture a new task quickly. Open the task list when you want to edit or delete items.</string>
     <string name="add_task_number_hint">Task number</string>
     <string name="add_task_name_hint">Task title</string>
     <string name="add_task_time_hint">Pick time</string>
@@ -66,6 +60,5 @@
     <string name="view_task_title">Task list</string>
     <string name="view_task_subtitle">Pull to refresh, edit details in place, and remove finished work.</string>
     <string name="view_task_empty">No tasks yet. Add your first task to start building your schedule.</string>
-    <string name="task_time_label">Time</string>
     <string name="task_number_prefix">Task </string>
 </resources>

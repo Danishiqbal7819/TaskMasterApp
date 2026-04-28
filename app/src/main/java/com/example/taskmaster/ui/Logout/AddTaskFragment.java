@@ -28,7 +28,6 @@ public class AddTaskFragment extends Fragment {
     private EditText taskTitleInput;
     private TextView taskTimeView;
     private Button saveButton;
-    private Button updateButton;
     private Button openListButton;
     private database databaseHelper;
 
@@ -47,7 +46,6 @@ public class AddTaskFragment extends Fragment {
         taskTitleInput = view.findViewById(R.id.tasktitle);
         taskTimeView = view.findViewById(R.id.tasktime);
         saveButton = view.findViewById(R.id.buttoninsert);
-        updateButton = view.findViewById(R.id.buttonUpdate);
         openListButton = view.findViewById(R.id.buttonOpenList);
         databaseHelper = new database(requireContext(), "todoDatabase", null, 1);
     }
@@ -71,25 +69,6 @@ public class AddTaskFragment extends Fragment {
                 clearInputs();
             } else {
                 Toast.makeText(getActivity(), "Could not save task", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        updateButton.setOnClickListener(v -> {
-            if (!validateInputs()) {
-                return;
-            }
-
-            boolean updated = databaseHelper.updateData(
-                    valueOf(taskNumberInput),
-                    valueOf(taskTitleInput),
-                    valueOf(taskTimeView)
-            );
-
-            if (updated) {
-                Toast.makeText(getActivity(), "Task updated", Toast.LENGTH_SHORT).show();
-                clearInputs();
-            } else {
-                Toast.makeText(getActivity(), "Task number not found", Toast.LENGTH_SHORT).show();
             }
         });
 

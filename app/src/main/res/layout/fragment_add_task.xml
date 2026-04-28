@@ -113,17 +113,6 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp" />
 
-<!--        <Button-->
-<!--            android:id="@+id/buttonUpdate"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="52dp"-->
-<!--            android:layout_marginTop="12dp"-->
-<!--            android:background="@drawable/bg_secondary_button"-->
-<!--            android:text="@string/add_task_secondary"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/colorPrimarydark"-->
-<!--            android:textSize="15sp" />-->
-
         <Button
             android:id="@+id/buttonOpenList"
             android:layout_width="match_parent"

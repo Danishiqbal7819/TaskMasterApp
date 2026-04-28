@@ -16,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     private final Runnable launchTaskApp = new Runnable() {
         @Override
         public void run() {
-            Intent intent = new Intent(SplashActivity.this, navdrawer.class);
+            Intent intent = new Intent(SplashActivity.this, TaskDashboardActivity.class);
             startActivity(intent);
             finish();
         }
