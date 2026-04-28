@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#C8CBDC</color>
+    <color name="colorPrimarydark">#0746DF</color>
+    <color name="Transparent">@android:color/transparent</color>
+    <color name="page_background">#F4F7FB</color>
+    <color name="surface_card">#FFFFFFFF</color>
+    <color name="text_primary">#18202A</color>
+    <color name="text_secondary">#5F6B7A</color>
+    <color name="accent_teal">#22B8A0</color>
+    <color name="accent_orange">#FFB648</color>
+    <color name="accent_soft_blue">#EAF2FF</color>
+    <color name="accent_soft_teal">#E8F9F5</color>
+    <color name="accent_soft_orange">#FFF4DE</color>
+</resources>
