@@ -11,8 +11,8 @@
     <string name="menu_gallery">Overview</string>
     <string name="menu_slideshow">Tips</string>
     <string name="view_tasks">View tasks</string>
-    <string name="update_tasks">Update tasks</string>
-    <string name="delete_tasks">Delete tasks</string>
+    <string name="update_tasks">Update</string>
+    <string name="delete_tasks">Delete</string>
     <string name="custom_tasks">Add task</string>
     <string name="drawer_secondary_section">Task actions</string>
     <string name="drawer_fab_hint">Jumping to add task</string>
@@ -54,7 +54,7 @@
     <string name="add_task_name_hint">Task title</string>
     <string name="add_task_time_hint">Pick time</string>
     <string name="add_task_primary">Save task</string>
-    <string name="add_task_secondary">Update task</string>
+    <string name="add_task_secondary">Update</string>
     <string name="add_task_tertiary">Open task list</string>
     <string name="add_task_tip">Tip: keep titles short and times specific so the list stays easy to scan.</string>
     <string name="view_task_title">Task list</string>

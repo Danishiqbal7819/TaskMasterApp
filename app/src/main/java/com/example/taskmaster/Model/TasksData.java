@@ -1,6 +1,6 @@
 package com.example.taskmaster.Model;
 
-public class student {
+public class TasksData {
 public  String ID;
     public String taskno;
     public String task;

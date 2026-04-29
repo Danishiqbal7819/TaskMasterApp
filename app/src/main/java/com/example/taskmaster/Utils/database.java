@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
-import com.example.taskmaster.Model.student;
+import com.example.taskmaster.Model.TasksData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,12 +99,12 @@ public  boolean updateData(String Taskno,String Task,String TaskTime){
     else {return false;}
 
 }
-public List<student> getData(){
-        List<student> data=new ArrayList<>();
+public List<TasksData> getData(){
+        List<TasksData> data=new ArrayList<>();
         SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("Select * from Student",null,null);
         while(cursor.moveToNext()){
-            student studen=new student();
+            TasksData studen=new TasksData();
             studen.taskno=cursor.getString(1);
             studen.task=cursor.getString(2);
             studen.time=cursor.getString(3);

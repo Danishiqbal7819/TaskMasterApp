@@ -1,6 +1,7 @@
 package com.example.taskmaster.ui.Logout;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.navigation.Navigation;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class AddTaskFragment extends Fragment {
@@ -107,18 +109,74 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void setTime() {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), R.style.DialogStyle,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onTimeSet(TimePicker view, int hours, int minutes) {
-                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
-                        taskTimeView.setText(formattedTime);
-                        taskTimeView.setTextColor(requireContext().getColor(R.color.text_primary));
-                    }
-                }, 15, 56, false);
-        timePickerDialog.show();
-        timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
-        timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+        // Open Date + Time Picker when clicking taskTime
+            Calendar calendar = Calendar.getInstance();
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getContext(),
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = calendar.get(Calendar.MINUTE);
+
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                getContext(),
+                                (timeView, selectedHour, selectedMinute) -> {
+
+                                    // Convert to 12-hour format with AM/PM
+                                    String amPm = (selectedHour >= 12) ? "PM" : "AM";
+
+                                    int formattedHour = selectedHour % 12;
+                                    if (formattedHour == 0) {
+                                        formattedHour = 12;
+                                    }
+
+                                    String formattedTime = String.format(
+                                            Locale.getDefault(),
+                                            "%02d:%02d %s",
+                                            formattedHour,
+                                            selectedMinute,
+                                            amPm
+                                    );
+
+                                    // Final format: 11/12/2024  11:00 AM
+                                    String selectedDateTime =
+                                            selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear
+                                                    + "  " + formattedTime;
+
+                                    taskTimeView.setText(selectedDateTime);
+
+                                },
+                                hour,     // already defined above
+                                minute,   // already defined above
+                                false
+                        );
+
+                        timePickerDialog.show();
+
+                    },
+                    year,
+                    month,
+                    day
+            );
+
+            datePickerDialog.show();
+//        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), R.style.DialogStyle,
+//                new TimePickerDialog.OnTimeSetListener() {
+//                    @SuppressLint("SetTextI18n")
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hours, int minutes) {
+//                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
+//                        taskTimeView.setText(formattedTime);
+//                        taskTimeView.setTextColor(requireContext().getColor(R.color.text_primary));
+//                    }
+//                }, 15, 56, false);
+//        timePickerDialog.show();
+//        timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+//        timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
     }
 }

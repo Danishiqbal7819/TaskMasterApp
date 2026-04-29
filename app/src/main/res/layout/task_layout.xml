@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="18dp">
 
+    <!-- Top Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,9 +39,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:gravity="top|start"
                 android:hint="@string/add_task_name_hint"
-                android:inputType="textCapSentences"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLines="5"
+                android:minLines="2"
                 android:padding="0dp"
+                android:scrollbars="vertical"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="17sp"
@@ -58,9 +63,11 @@
                 android:textColor="@color/text_secondary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="14sp" />
+
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Bottom Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,10 +75,31 @@
         android:gravity="end"
         android:orientation="horizontal">
 
+        <!-- Small Complete Button -->
+        <Button
+            android:id="@+id/buttonComplete"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:background="@drawable/bg_icon_button"
+            android:drawableEnd="@drawable/outline_bookmark_check_24"
+            android:drawablePadding="4dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+
+        <!-- Update Button -->
         <Button
             android:id="@+id/buttonUpdate1"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/bg_icon_button"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -80,6 +108,7 @@
             android:textColor="@color/colorPrimarydark"
             android:textSize="13sp" />
 
+        <!-- Delete Button -->
         <Button
             android:id="@+id/buttondelete1"
             android:layout_width="wrap_content"
@@ -92,5 +121,7 @@
             android:textAllCaps="false"
             android:textColor="#C8473D"
             android:textSize="13sp" />
+
     </LinearLayout>
+
 </LinearLayout>

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.taskmaster.Model.student;
+import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        List<student> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
+        List<TasksData> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
         int taskCount = tasks.size();
         taskCountView.setText(String.valueOf(taskCount));
 
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        student latestTask = tasks.get(taskCount - 1);
+        TasksData latestTask = tasks.get(taskCount - 1);
         String taskTitle = safeValue(latestTask.task);
         String taskNumber = safeValue(latestTask.taskno);
         String taskTime = safeValue(latestTask.time);

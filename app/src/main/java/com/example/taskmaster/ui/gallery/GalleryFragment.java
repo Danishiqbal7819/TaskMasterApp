@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.taskmaster.Model.student;
+import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
@@ -72,13 +72,13 @@ public class GalleryFragment extends Fragment {
             return;
         }
 
-        List<student> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
+        List<TasksData> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
         int recentCount = Math.min(tasks.size(), taskCards.length);
         emptyRecentView.setVisibility(recentCount == 0 ? View.VISIBLE : View.GONE);
 
         for (int i = 0; i < taskCards.length; i++) {
             if (i < recentCount) {
-                student task = tasks.get(tasks.size() - 1 - i);
+                TasksData task = tasks.get(tasks.size() - 1 - i);
                 taskCards[i].setVisibility(View.VISIBLE);
                 taskTitleViews[i].setText(getTaskTitle(task, i));
                 taskMetaViews[i].setText(getTaskMeta(task));
@@ -88,7 +88,7 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    private String getTaskTitle(student task, int position) {
+    private String getTaskTitle(TasksData task, int position) {
         String title = safeValue(task.task);
         if (!title.isEmpty()) {
             return title;
@@ -96,7 +96,7 @@ public class GalleryFragment extends Fragment {
         return "Task item " + (position + 1);
     }
 
-    private String getTaskMeta(student task) {
+    private String getTaskMeta(TasksData task) {
         String taskNumber = safeValue(task.taskno);
         String taskTime = safeValue(task.time);
 

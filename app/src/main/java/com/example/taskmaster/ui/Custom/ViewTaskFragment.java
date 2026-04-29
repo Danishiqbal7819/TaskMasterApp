@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.taskmaster.Adapter.TODOAdapter;
-import com.example.taskmaster.Model.student;
+import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
@@ -53,7 +53,7 @@ public class ViewTaskFragment extends Fragment {
     }
 
     private void loadTasks() {
-        List<student> data = databaseHelper.getData();
+        List<TasksData> data = databaseHelper.getData();
         todoAdapter = new TODOAdapter(requireContext(), data, this::loadTasks);
         recyclerView.setAdapter(todoAdapter);
         emptyStateText.setVisibility(data.isEmpty() ? View.VISIBLE : View.GONE);
