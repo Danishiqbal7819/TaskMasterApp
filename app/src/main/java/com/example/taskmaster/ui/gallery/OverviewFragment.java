@@ -18,7 +18,7 @@ import com.example.taskmaster.Utils.database;
 
 import java.util.List;
 
-public class GalleryFragment extends Fragment {
+public class OverviewFragment extends Fragment {
 
     private TextView emptyRecentView;
     private LinearLayout[] taskCards;

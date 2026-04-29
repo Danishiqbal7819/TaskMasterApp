@@ -62,17 +62,34 @@
         android:textStyle="bold" />
 
     <!-- TIME (Secondary Info) -->
-    <EditText
-        android:id="@+id/tasktime"
+    <!-- DEADLINE -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:background="@android:color/transparent"
-        android:enabled="false"
-        android:hint="@string/add_task_time_hint"
-        android:padding="0dp"
-        android:textColor="@color/text_secondary"
-        android:textSize="13sp" />
+        android:padding="2dp"
+        android:background="@drawable/bg_chip_blue"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deadline: "
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimarydark"/>
+
+        <EditText
+            android:id="@+id/tasktime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:enabled="false"
+            android:hint="@string/add_task_time_hint"
+            android:padding="0dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+    </LinearLayout>
+
 
     <!-- ACTIONS (Balanced Buttons Row) -->
     <LinearLayout
