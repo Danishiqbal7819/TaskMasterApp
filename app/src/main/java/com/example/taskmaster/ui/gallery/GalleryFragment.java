@@ -72,7 +72,7 @@ public class GalleryFragment extends Fragment {
             return;
         }
 
-        List<TasksData> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
+        List<TasksData> tasks = new database(getContext()).getData();
         int recentCount = Math.min(tasks.size(), taskCards.length);
         emptyRecentView.setVisibility(recentCount == 0 ? View.VISIBLE : View.GONE);
 

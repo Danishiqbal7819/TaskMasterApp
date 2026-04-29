@@ -10,6 +10,8 @@
     <color name="text_secondary">#5F6B7A</color>
     <color name="accent_teal">#22B8A0</color>
     <color name="accent_orange">#FFB648</color>
+    <color name="light_green">#5827F008</color>
+    <color name="light_red">#5AE61518</color>
     <color name="accent_soft_blue">#EAF2FF</color>
     <color name="accent_soft_teal">#E8F9F5</color>
     <color name="accent_soft_orange">#FFF4DE</color>

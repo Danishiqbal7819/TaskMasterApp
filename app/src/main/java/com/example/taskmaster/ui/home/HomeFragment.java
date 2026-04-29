@@ -10,11 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskmaster.Adapter.TaskAdapter;
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -23,6 +27,8 @@ public class HomeFragment extends Fragment {
     private TextView nextTimeView;
     private TextView focusTaskView;
     private TextView focusDetailView;
+    private database databasehelper;
+    private RecyclerView completedTaskRecycler;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -32,8 +38,22 @@ public class HomeFragment extends Fragment {
         initView(view);
         initClick(view);
         bindTaskSummary();
+        setData();
 
         return view;
+    }
+
+    private void setData() {
+
+        ArrayList<TasksData> completedTasks =
+                databasehelper.getAllCompletedTasks();
+
+        completedTaskRecycler.setLayoutManager(
+                new LinearLayoutManager(getContext())
+        );
+
+        completedTaskRecycler.setAdapter(
+                new TaskAdapter(this.getContext(),completedTasks,this::bindTaskSummary));
     }
 
     private void initClick(View view) {
@@ -52,6 +72,8 @@ public class HomeFragment extends Fragment {
         nextTimeView = view.findViewById(R.id.homeNextTime);
         focusTaskView = view.findViewById(R.id.homeFocusTask);
         focusDetailView = view.findViewById(R.id.homeFocusDetail);
+        databasehelper=new database(getContext());
+        completedTaskRecycler=view.findViewById(R.id.completedTaskRecycler);
     }
 
     private void bindTaskSummary() {
@@ -59,7 +81,7 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        List<TasksData> tasks = new database(getContext(), "todoDatabase", null, 1).getData();
+        List<TasksData> tasks = new database(getContext()).getData();
         int taskCount = tasks.size();
         taskCountView.setText(String.valueOf(taskCount));
 

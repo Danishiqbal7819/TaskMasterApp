@@ -49,14 +49,15 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <EditText
+            <TextView
                 android:id="@+id/taskno"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@drawable/bg_input_surface"
                 android:gravity="center_vertical"
+                android:enabled="false"
+                android:text="TASK NO:1"
                 android:hint="@string/add_task_number_hint"
-                android:inputType="text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textColor="@color/text_primary"
@@ -102,7 +103,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttoninsert"
             android:layout_width="match_parent"
             android:layout_height="52dp"
@@ -113,7 +114,7 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonOpenList"
             android:layout_width="match_parent"
             android:layout_height="52dp"

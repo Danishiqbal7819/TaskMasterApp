@@ -41,7 +41,7 @@ public class ViewTaskFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         recyclerView = view.findViewById(R.id.tasksRecyclerView);
         emptyStateText = view.findViewById(R.id.emptyStateText);
-        databaseHelper = new database(requireContext(), "todoDatabase", null, 1);
+        databaseHelper = new database(requireContext());
     }
 
     private void setupRecyclerView() {

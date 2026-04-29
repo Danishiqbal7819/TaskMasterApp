@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/lltaskitems12"
     android:layout_height="wrap_content"
     android:layout_marginBottom="14dp"
     android:background="@drawable/bg_surface_card"
@@ -21,6 +22,7 @@
             android:background="@drawable/bg_chip_blue"
             android:paddingStart="12dp"
             android:paddingTop="8dp"
+            android:text="Task:2"
             android:paddingEnd="12dp"
             android:paddingBottom="8dp"
             android:textColor="@color/colorPrimarydark"
@@ -44,6 +46,7 @@
                 android:inputType="textMultiLine|textCapSentences"
                 android:maxLines="5"
                 android:minLines="2"
+                android:enabled="false"
                 android:padding="0dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/text_primary"
@@ -56,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:enabled="false"
                 android:background="@android:color/transparent"
                 android:hint="@string/add_task_time_hint"
                 android:inputType="text"
@@ -63,6 +67,22 @@
                 android:textColor="@color/text_secondary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="14sp" />
+
+            <!-- Task Status TextView -->
+            <TextView
+                android:id="@+id/taskStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_chip_blue"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:text="Pending"
+                android:textColor="@color/colorPrimarydark"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
@@ -72,11 +92,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:paddingBottom="4dp"
         android:gravity="end"
         android:orientation="horizontal">
 
         <!-- Small Complete Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonComplete"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
@@ -85,23 +106,25 @@
             android:background="@drawable/bg_icon_button"
             android:drawableEnd="@drawable/outline_bookmark_check_24"
             android:drawablePadding="4dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="Done"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/holo_green_dark"
             android:textSize="13sp" />
 
         <!-- Update Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonUpdate1"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_icon_button"
             android:paddingStart="16dp"
+            android:drawableEnd="@drawable/baseline_update_24"
+            android:drawablePadding="2dp"
             android:paddingEnd="16dp"
             android:text="@string/add_task_secondary"
             android:textAllCaps="false"
@@ -109,13 +132,16 @@
             android:textSize="13sp" />
 
         <!-- Delete Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttondelete1"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_delete_button"
             android:paddingStart="16dp"
+            android:layout_marginBottom="4dp"
+            android:drawableEnd="@drawable/baseline_delete_24"
+            android:drawablePadding="2dp"
             android:paddingEnd="16dp"
             android:text="@string/delete_tasks"
             android:textAllCaps="false"

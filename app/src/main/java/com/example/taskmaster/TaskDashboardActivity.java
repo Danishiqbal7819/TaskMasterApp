@@ -28,7 +28,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarNavdrawer.toolbar);
 
-        binding.appBarNavdrawer.fab.setOnClickListener(this::openAddTaskScreen);
+//        binding.appBarNavdrawer.fab.setOnClickListener(this::openAddTaskScreen);
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

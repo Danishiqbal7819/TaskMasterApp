@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +23,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private final List<TasksData> data;
     private final Context context;
     private final Runnable onTasksChanged;
 
-    public TODOAdapter(Context context, List<TasksData> data, Runnable onTasksChanged) {
+    public TaskAdapter(Context context, List<TasksData> data, Runnable onTasksChanged) {
         this.data = data;
         this.context = context;
         this.onTasksChanged = onTasksChanged;

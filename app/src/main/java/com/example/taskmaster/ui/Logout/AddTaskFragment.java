@@ -3,6 +3,7 @@ package com.example.taskmaster.ui.Logout;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,14 +20,17 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.taskmaster.R;
+import com.example.taskmaster.TaskDashboardActivity;
 import com.example.taskmaster.Utils.database;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Locale;
 
 public class AddTaskFragment extends Fragment {
 
-    private EditText taskNumberInput;
+    private TextView taskNumberInput;
     private EditText taskTitleInput;
     private TextView taskTimeView;
     private Button saveButton;
@@ -40,8 +44,14 @@ public class AddTaskFragment extends Fragment {
         initView(view);
         initClick(view);
         clearInputs();
+        setdata();
         return view;
     }
+
+        private void setdata() {
+            int size = databaseHelper.getData().size();
+            taskNumberInput.setText("TASK NO:"+String.valueOf(size + 1));
+        }
 
     private void initView(View view) {
         taskNumberInput = view.findViewById(R.id.taskno);
@@ -49,7 +59,7 @@ public class AddTaskFragment extends Fragment {
         taskTimeView = view.findViewById(R.id.tasktime);
         saveButton = view.findViewById(R.id.buttoninsert);
         openListButton = view.findViewById(R.id.buttonOpenList);
-        databaseHelper = new database(requireContext(), "todoDatabase", null, 1);
+        databaseHelper = new database(requireContext());
     }
 
     private void initClick(View view) {
@@ -60,15 +70,17 @@ public class AddTaskFragment extends Fragment {
                 return;
             }
 
-            boolean inserted = databaseHelper.InsertData(
+            boolean inserted = databaseHelper.insertData(
                     valueOf(taskNumberInput),
                     valueOf(taskTitleInput),
                     valueOf(taskTimeView)
             );
 
             if (inserted) {
-                Toast.makeText(getActivity(), "Task saved", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Task saved", Toast.LENGTH_SHORT).show();
                 clearInputs();
+                Intent intent=new Intent(getActivity(), TaskDashboardActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(getActivity(), "Could not save task", Toast.LENGTH_SHORT).show();
             }
@@ -98,7 +110,7 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void clearInputs() {
-        taskNumberInput.setText("");
+//        taskNumberInput.setText("");
         taskTitleInput.setText("");
         taskTimeView.setText(R.string.add_task_time_hint);
         taskTimeView.setTextColor(requireContext().getColor(R.color.text_secondary));
@@ -165,18 +177,5 @@ public class AddTaskFragment extends Fragment {
             );
 
             datePickerDialog.show();
-//        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), R.style.DialogStyle,
-//                new TimePickerDialog.OnTimeSetListener() {
-//                    @SuppressLint("SetTextI18n")
-//                    @Override
-//                    public void onTimeSet(TimePicker view, int hours, int minutes) {
-//                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
-//                        taskTimeView.setText(formattedTime);
-//                        taskTimeView.setTextColor(requireContext().getColor(R.color.text_primary));
-//                    }
-//                }, 15, 56, false);
-//        timePickerDialog.show();
-//        timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
-//        timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
     }
 }
