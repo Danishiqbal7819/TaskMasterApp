@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,9 @@ import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,9 +57,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
 
         int taskId = item.id;
         holder.taskNumberView.setTextColor(context.getColor(R.color.colorPrimarydark));
-        holder.taskNumberView.setText(
-                context.getString(R.string.task_number_prefix) + ": " + taskId
-        );
+        holder.taskNumberView.setText(item.taskno);
         holder.taskTitleInput.setText(safeValue(item.task));
         holder.taskTimeInput.setText(safeValue(item.time));
 
@@ -199,48 +201,12 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         int minute = calendar.get(Calendar.MINUTE);
 
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                context,
-                                (timeView, selectedHour, selectedMinute) -> {
-
-                                    String amPm =
-                                            (selectedHour >= 12) ? "PM" : "AM";
-
-                                    int formattedHour = selectedHour % 12;
-
-                                    if (formattedHour == 0) {
-                                        formattedHour = 12;
-                                    }
-
-                                    String formattedTime = String.format(
-                                            Locale.getDefault(),
-                                            "%02d:%02d %s",
-                                            formattedHour,
-                                            selectedMinute,
-                                            amPm
-                                    );
-
-                                    String selectedDateTime =
-                                            selectedDay + "/" +
-                                                    (selectedMonth + 1) + "/" +
-                                                    selectedYear + "  " +
-                                                    formattedTime;
-
-                                    taskTime.setText(selectedDateTime);
-
-                                },
-                                hour,
-                                minute,
-                                false
-                        );
-
-                        timePickerDialog.show();
+                        openTimePicker(context, taskTime, selectedDay, selectedMonth, selectedYear, hour, minute);
                     },
                     year,
                     month,
                     day
             );
-
             datePickerDialog.show();
         });
 
@@ -311,5 +277,68 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
             markCompleteButton = itemView.findViewById(R.id.buttonComplete);
             taskstatus = itemView.findViewById(R.id.taskStatus);
         }
+    }
+    private void openTimePicker(Context context,
+                                EditText taskTime,
+                                int day,
+                                int month,
+                                int year,
+                                int hour,
+                                int minute) {
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                context,
+                (timeView, selectedHour, selectedMinute) -> {
+
+                    String amPm = (selectedHour >= 12) ? "PM" : "AM";
+
+                    int formattedHour = selectedHour % 12;
+                    if (formattedHour == 0) formattedHour = 12;
+
+                    String formattedTime = String.format(
+                            Locale.getDefault(),
+                            "%02d:%02d %s",
+                            formattedHour,
+                            selectedMinute,
+                            amPm
+                    );
+
+                    String selectedDateTime =
+                            day + "/" + (month + 1) + "/" + year + "  " + formattedTime;
+
+                    try {
+                        SimpleDateFormat sdf =
+                                new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault());
+
+                        Date selectedDate = sdf.parse(selectedDateTime);
+                        Date currentDate = new Date();
+
+                        if (selectedDate != null && selectedDate.before(currentDate)) {
+
+                            Toast.makeText(context,
+                                    "Please select a future time",
+                                    Toast.LENGTH_SHORT).show();
+
+                            taskTime.setText("");
+
+                            // 🔥 reopen fresh picker safely
+                            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                                    openTimePicker(context, taskTime, day, month, year, hour, minute), 200);
+
+                        } else {
+                            taskTime.setText(selectedDateTime);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                },
+                hour,
+                minute,
+                false
+        );
+
+        timePickerDialog.show();
     }
 }

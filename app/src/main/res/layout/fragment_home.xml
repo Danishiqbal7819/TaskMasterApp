@@ -130,7 +130,7 @@
             <!-- COMPLETED TASKS CARD -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_chip_teal"
                 android:orientation="vertical"
@@ -160,9 +160,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/completedTaskRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:layout_marginTop="12dp"
-                    android:nestedScrollingEnabled="false" />
+                    android:nestedScrollingEnabled="true" />
 
             </LinearLayout>
 
@@ -172,7 +173,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:background="@drawable/bg_surface_card"
+            android:background="@drawable/bg_dashboard_header"
             android:orientation="vertical"
             android:padding="20dp">
 
@@ -180,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home_focus_label"
-                android:textColor="@color/text_secondary"
+                android:textColor="#FFFFFF"
                 android:textSize="13sp" />
 
             <TextView
@@ -189,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/home_empty_focus"
-                android:textColor="@color/text_primary"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -199,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/home_section_message"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -252,6 +253,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvtodayquotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

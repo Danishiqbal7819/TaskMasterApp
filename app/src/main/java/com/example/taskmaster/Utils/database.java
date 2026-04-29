@@ -68,7 +68,82 @@ public class database extends SQLiteOpenHelper {
 
         return result != -1;
     }
+    public ArrayList<TasksData> getPendingTasks() {
 
+        ArrayList<TasksData> tasks = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM TaskTable WHERE isComplete = 0",
+                null
+        );
+
+        while (cursor.moveToNext()) {
+
+            TasksData task = new TasksData();
+
+            task.id = cursor.getInt(0);          // ID
+            task.taskno = cursor.getString(1);   // Taskno
+            task.task = cursor.getString(2);     // tasktitle
+            task.time = cursor.getString(3);     // TaskTime
+            task.isComplete = cursor.getInt(4);  // isComplete
+
+            tasks.add(task);
+        }
+
+        cursor.close();
+
+        return tasks;
+    }
+    public ArrayList<TasksData> getOverdueTasks() {
+
+        ArrayList<TasksData> tasks = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM TaskTable WHERE isComplete = 0",
+                null
+        );
+
+        java.text.SimpleDateFormat sdf =
+                new java.text.SimpleDateFormat(
+                        "dd/MM/yyyy  hh:mm a",
+                        java.util.Locale.getDefault()
+                );
+
+        java.util.Date currentDate = new java.util.Date();
+
+        while (cursor.moveToNext()) {
+
+            String taskTime = cursor.getString(3); // TaskTime
+
+            try {
+                java.util.Date taskDate = sdf.parse(taskTime);
+
+                if (taskDate != null && taskDate.before(currentDate)) {
+
+                    TasksData task = new TasksData();
+
+                    task.id = cursor.getInt(0);          // ID
+                    task.taskno = cursor.getString(1);   // Taskno
+                    task.task = cursor.getString(2);     // tasktitle
+                    task.time = cursor.getString(3);     // TaskTime
+                    task.isComplete = cursor.getInt(4);  // isComplete
+
+                    tasks.add(task);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        cursor.close();
+
+        return tasks;
+    }
     public ArrayList<TasksData> getAllCompletedTasks() {
 
         ArrayList<TasksData> tasks = new ArrayList<>();

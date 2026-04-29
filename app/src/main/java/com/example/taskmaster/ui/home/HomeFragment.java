@@ -19,6 +19,7 @@ import com.example.taskmaster.R;
 import com.example.taskmaster.Utils.database;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -29,6 +30,8 @@ public class HomeFragment extends Fragment {
     private TextView focusDetailView;
     private database databasehelper;
     private RecyclerView completedTaskRecycler;
+    private TextView completedTaskCount;
+    private TextView tvtodayquotes;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,16 +47,16 @@ public class HomeFragment extends Fragment {
     }
 
     private void setData() {
-
+        tvtodayquotes.setText(getTodayQuote());
         ArrayList<TasksData> completedTasks =
                 databasehelper.getAllCompletedTasks();
-
+        completedTaskCount.setText(completedTasks.size()+" Completed");
         completedTaskRecycler.setLayoutManager(
                 new LinearLayoutManager(getContext())
         );
 
         completedTaskRecycler.setAdapter(
-                new TaskAdapter(this.getContext(),completedTasks,this::bindTaskSummary));
+                new TaskAdapter(this.getContext(),completedTasks,"Completed",this::bindTaskSummary));
     }
 
     private void initClick(View view) {
@@ -72,8 +75,10 @@ public class HomeFragment extends Fragment {
         nextTimeView = view.findViewById(R.id.homeNextTime);
         focusTaskView = view.findViewById(R.id.homeFocusTask);
         focusDetailView = view.findViewById(R.id.homeFocusDetail);
+        tvtodayquotes = view.findViewById(R.id.tvtodayquotes);
         databasehelper=new database(getContext());
         completedTaskRecycler=view.findViewById(R.id.completedTaskRecycler);
+        completedTaskCount=view.findViewById(R.id.completedTaskCount);
     }
 
     private void bindTaskSummary() {
@@ -104,11 +109,11 @@ public class HomeFragment extends Fragment {
         if (taskNumber.isEmpty() && taskTime.isEmpty()) {
             detail = getString(R.string.home_section_message);
         } else if (taskTime.isEmpty()) {
-            detail = "Task " + taskNumber;
+            detail = taskNumber;
         } else if (taskNumber.isEmpty()) {
-            detail = "Scheduled at " + taskTime;
+            detail = " Deadline :" + taskTime;
         } else {
-            detail = "Task " + taskNumber + " scheduled at " + taskTime;
+            detail = taskNumber + " Deadline :" + taskTime;
         }
         focusDetailView.setText(detail);
     }
@@ -121,5 +126,27 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         bindTaskSummary();
+    }
+    private final String[] quotes = new String[]{
+            "Today is a fresh start. Make it count.",
+            "Small steps today lead to big results tomorrow.",
+            "Focus on progress, not perfection.",
+            "Your future is created by what you do today.",
+            "Start where you are. Use what you have. Do what you can.",
+            "One task at a time. One win at a time.",
+            "Discipline today builds success tomorrow.",
+            "Don’t wait for motivation. Build momentum.",
+            "Make today so productive that yesterday gets jealous.",
+            "Stay focused. Stay consistent. Stay moving."
+    };
+    private String getTodayQuote() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+
+        int index = dayOfYear % quotes.length;
+
+        return quotes[index];
     }
 }

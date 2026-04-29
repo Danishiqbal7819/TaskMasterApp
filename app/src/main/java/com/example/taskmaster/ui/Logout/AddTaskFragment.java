@@ -25,7 +25,9 @@ import com.example.taskmaster.Utils.database;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddTaskFragment extends Fragment {
@@ -48,10 +50,10 @@ public class AddTaskFragment extends Fragment {
         return view;
     }
 
-        private void setdata() {
-            int size = databaseHelper.getData().size();
-            taskNumberInput.setText("TASK NO:"+String.valueOf(size + 1));
-        }
+    private void setdata() {
+        int size = databaseHelper.getData().size();
+        taskNumberInput.setText("TASK NO:" + String.valueOf(size + 1));
+    }
 
     private void initView(View view) {
         taskNumberInput = view.findViewById(R.id.taskno);
@@ -77,10 +79,8 @@ public class AddTaskFragment extends Fragment {
             );
 
             if (inserted) {
-//                Toast.makeText(getActivity(), "Task saved", Toast.LENGTH_SHORT).show();
                 clearInputs();
-                Intent intent=new Intent(getActivity(), TaskDashboardActivity.class);
-                startActivity(intent);
+                Navigation.findNavController(v).navigate(R.id.View_tasks);
             } else {
                 Toast.makeText(getActivity(), "Could not save task", Toast.LENGTH_SHORT).show();
             }
@@ -121,61 +121,76 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void setTime() {
-        // Open Date + Time Picker when clicking taskTime
-            Calendar calendar = Calendar.getInstance();
 
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar = Calendar.getInstance();
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    getContext(),
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                        int minute = calendar.get(Calendar.MINUTE);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                (view, selectedYear, selectedMonth, selectedDay) -> {
 
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getContext(),
-                                (timeView, selectedHour, selectedMinute) -> {
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(
+                            getContext(),
+                            (timeView, selectedHour, selectedMinute) -> {
 
-                                    // Convert to 12-hour format with AM/PM
-                                    String amPm = (selectedHour >= 12) ? "PM" : "AM";
+                                String amPm = (selectedHour >= 12) ? "PM" : "AM";
 
-                                    int formattedHour = selectedHour % 12;
-                                    if (formattedHour == 0) {
-                                        formattedHour = 12;
+                                int formattedHour = selectedHour % 12;
+                                if (formattedHour == 0) formattedHour = 12;
+
+                                String formattedTime = String.format(
+                                        Locale.getDefault(),
+                                        "%02d:%02d %s",
+                                        formattedHour,
+                                        selectedMinute,
+                                        amPm
+                                );
+
+                                String selectedDateTime =
+                                        selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear
+                                                + "  " + formattedTime;
+
+                                try {
+
+                                    SimpleDateFormat sdf =
+                                            new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault());
+
+                                    Date selectedDate = sdf.parse(selectedDateTime);
+                                    Date currentDate = new Date();
+
+                                    if (selectedDate != null && selectedDate.before(currentDate)) {
+
+                                        taskTimeView.setText("");
+                                        taskTimeView.setHint("Deadline");
+                                        Toast.makeText(getContext(),
+                                                "Deadline cannot be in the past",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        taskTimeView.setText(selectedDateTime);
                                     }
 
-                                    String formattedTime = String.format(
-                                            Locale.getDefault(),
-                                            "%02d:%02d %s",
-                                            formattedHour,
-                                            selectedMinute,
-                                            amPm
-                                    );
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    taskTimeView.setText("");
+                                }
 
-                                    // Final format: 11/12/2024  11:00 AM
-                                    String selectedDateTime =
-                                            selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear
-                                                    + "  " + formattedTime;
+                            },
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            false
+                    );
 
-                                    taskTimeView.setText(selectedDateTime);
+                    timePickerDialog.show();
 
-                                },
-                                hour,     // already defined above
-                                minute,   // already defined above
-                                false
-                        );
+                },
+                year,
+                month,
+                day
+        );
 
-                        timePickerDialog.show();
-
-                    },
-                    year,
-                    month,
-                    day
-            );
-
-            datePickerDialog.show();
+        datePickerDialog.show();
     }
 }

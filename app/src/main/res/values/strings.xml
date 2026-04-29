@@ -52,7 +52,7 @@
     <string name="add_task_subtitle">Use this screen to capture a new task quickly. Open the task list when you want to edit or delete items.</string>
     <string name="add_task_number_hint">Task number</string>
     <string name="add_task_name_hint">Task title</string>
-    <string name="add_task_time_hint">Pick time</string>
+    <string name="add_task_time_hint">Deadline</string>
     <string name="add_task_primary">Save task</string>
     <string name="add_task_secondary">Update</string>
     <string name="add_task_tertiary">Open task list</string>
