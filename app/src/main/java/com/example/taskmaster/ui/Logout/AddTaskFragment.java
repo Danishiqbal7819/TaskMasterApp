@@ -52,7 +52,7 @@ public class AddTaskFragment extends Fragment {
 
     private void setdata() {
         int size = databaseHelper.getData().size();
-        taskNumberInput.setText("TASK NO:" + String.valueOf(size + 1));
+        taskNumberInput.setText("Task " + String.valueOf(size + 1));
     }
 
     private void initView(View view) {

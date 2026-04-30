@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getWindow().setStatusBarColor(ContextCompat.getColor(SplashActivity.this,R.color.colorPrimarydark));
 
-        text=findViewById(R.id.text1);
+        text=findViewById(R.id.splashLoading);
         Animation animation= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.blinkanimation);
         text.startAnimation(animation);
 
