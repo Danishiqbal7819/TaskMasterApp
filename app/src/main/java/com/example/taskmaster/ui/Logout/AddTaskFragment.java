@@ -1,10 +1,7 @@
 package com.example.taskmaster.ui.Logout;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,10 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.taskmaster.R;
-import com.example.taskmaster.TaskDashboardActivity;
-import com.example.taskmaster.Utils.database;
-
-import org.w3c.dom.Text;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,7 +30,7 @@ public class AddTaskFragment extends Fragment {
     private TextView taskTimeView;
     private Button saveButton;
     private Button openListButton;
-    private database databaseHelper;
+    private MyDbHelper myDbHelperHelper;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,7 +44,7 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void setdata() {
-        int size = databaseHelper.getData().size();
+        int size = myDbHelperHelper.getData().size();
         taskNumberInput.setText("Task " + String.valueOf(size + 1));
     }
 
@@ -61,7 +54,7 @@ public class AddTaskFragment extends Fragment {
         taskTimeView = view.findViewById(R.id.tasktime);
         saveButton = view.findViewById(R.id.buttoninsert);
         openListButton = view.findViewById(R.id.buttonOpenList);
-        databaseHelper = new database(requireContext());
+        myDbHelperHelper = new MyDbHelper(requireContext());
     }
 
     private void initClick(View view) {
@@ -72,7 +65,7 @@ public class AddTaskFragment extends Fragment {
                 return;
             }
 
-            boolean inserted = databaseHelper.insertData(
+            boolean inserted = myDbHelperHelper.insertData(
                     valueOf(taskNumberInput),
                     valueOf(taskTitleInput),
                     valueOf(taskTimeView)

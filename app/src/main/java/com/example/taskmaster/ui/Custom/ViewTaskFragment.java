@@ -15,7 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.taskmaster.Adapter.TODOAdapter;
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.database;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ViewTaskFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private TextView emptyStateText;
-    private database databaseHelper;
+    private MyDbHelper myDbHelperHelper;
     private TODOAdapter todoAdapter;
     private TextView filterAll;
     private TextView filterCompleted;
@@ -53,34 +53,34 @@ public class ViewTaskFragment extends Fragment {
         filterCompleted = view.findViewById(R.id.filterCompleted);
         filterPending = view.findViewById(R.id.filterPending);
         filterOverdue = view.findViewById(R.id.filterOverdue);
-        databaseHelper = new database(requireContext());
+        myDbHelperHelper = new MyDbHelper(requireContext());
 
         currentFilter = "ALL";
         updateSelectedFilter(filterAll);
-        loadTasks(databaseHelper.getData());
+        loadTasks(myDbHelperHelper.getData());
 
         filterAll.setOnClickListener(v -> {
             currentFilter = "ALL";
             updateSelectedFilter(filterAll);
-            loadTasks(databaseHelper.getData());
+            loadTasks(myDbHelperHelper.getData());
         });
 
         filterCompleted.setOnClickListener(v -> {
             currentFilter = "COMPLETED";
             updateSelectedFilter(filterCompleted);
-            loadTasks(databaseHelper.getAllCompletedTasks());
+            loadTasks(myDbHelperHelper.getAllCompletedTasks());
         });
 
         filterPending.setOnClickListener(v -> {
             currentFilter = "PENDING";
             updateSelectedFilter(filterPending);
-            loadTasks(databaseHelper.getPendingTasks());
+            loadTasks(myDbHelperHelper.getPendingTasks());
         });
 
         filterOverdue.setOnClickListener(v -> {
             currentFilter = "OVERDUE";
             updateSelectedFilter(filterOverdue);
-            loadTasks(databaseHelper.getOverdueTasks());
+            loadTasks(myDbHelperHelper.getOverdueTasks());
         });
     }
 
@@ -103,32 +103,32 @@ public class ViewTaskFragment extends Fragment {
 
                 currentFilter = "COMPLETED";
                 updateSelectedFilter(filterCompleted);
-                loadTasks(databaseHelper.getAllCompletedTasks());
+                loadTasks(myDbHelperHelper.getAllCompletedTasks());
 
             } else if ("PENDING".equals(filterType)) {
 
                 currentFilter = "PENDING";
                 updateSelectedFilter(filterPending);
-                loadTasks(databaseHelper.getPendingTasks());
+                loadTasks(myDbHelperHelper.getPendingTasks());
 
             } else if ("OVERDUE".equals(filterType)) {
 
                 currentFilter = "OVERDUE";
                 updateSelectedFilter(filterOverdue);
-                loadTasks(databaseHelper.getOverdueTasks());
+                loadTasks(myDbHelperHelper.getOverdueTasks());
 
             } else {
 
                 currentFilter = "ALL";
                 updateSelectedFilter(filterAll);
-                loadTasks(databaseHelper.getData());
+                loadTasks(myDbHelperHelper.getData());
             }
 
         } else {
 
             currentFilter = "ALL";
             updateSelectedFilter(filterAll);
-            loadTasks(databaseHelper.getData());
+            loadTasks(myDbHelperHelper.getData());
         }
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -136,19 +136,19 @@ public class ViewTaskFragment extends Fragment {
             switch (currentFilter) {
 
                 case "COMPLETED":
-                    loadTasks(databaseHelper.getAllCompletedTasks());
+                    loadTasks(myDbHelperHelper.getAllCompletedTasks());
                     break;
 
                 case "PENDING":
-                    loadTasks(databaseHelper.getPendingTasks());
+                    loadTasks(myDbHelperHelper.getPendingTasks());
                     break;
 
                 case "OVERDUE":
-                    loadTasks(databaseHelper.getOverdueTasks());
+                    loadTasks(myDbHelperHelper.getOverdueTasks());
                     break;
 
                 default:
-                    loadTasks(databaseHelper.getData());
+                    loadTasks(myDbHelperHelper.getData());
                     break;
             }
 
@@ -187,22 +187,22 @@ private void updateSelectedFilter(TextView selectedView) {
         switch (currentFilter) {
 
             case "COMPLETED":
-                loadTasks(databaseHelper.getAllCompletedTasks());
+                loadTasks(myDbHelperHelper.getAllCompletedTasks());
                 updateSelectedFilter(filterCompleted);
                 break;
 
             case "PENDING":
-                loadTasks(databaseHelper.getPendingTasks());
+                loadTasks(myDbHelperHelper.getPendingTasks());
                 updateSelectedFilter(filterPending);
                 break;
 
             case "OVERDUE":
-                loadTasks(databaseHelper.getOverdueTasks());
+                loadTasks(myDbHelperHelper.getOverdueTasks());
                 updateSelectedFilter(filterOverdue);
                 break;
 
             default:
-                loadTasks(databaseHelper.getData());
+                loadTasks(myDbHelperHelper.getData());
                 updateSelectedFilter(filterAll);
                 break;
         }
@@ -233,19 +233,19 @@ private void updateSelectedFilter(TextView selectedView) {
         switch (currentFilter) {
 
             case "COMPLETED":
-                loadTasks(databaseHelper.getAllCompletedTasks());
+                loadTasks(myDbHelperHelper.getAllCompletedTasks());
                 break;
 
             case "PENDING":
-                loadTasks(databaseHelper.getPendingTasks());
+                loadTasks(myDbHelperHelper.getPendingTasks());
                 break;
 
             case "OVERDUE":
-                loadTasks(databaseHelper.getOverdueTasks());
+                loadTasks(myDbHelperHelper.getOverdueTasks());
                 break;
 
             default:
-                loadTasks(databaseHelper.getData());
+                loadTasks(myDbHelperHelper.getData());
                 break;
         }
     }

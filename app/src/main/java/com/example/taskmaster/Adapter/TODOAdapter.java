@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.database;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,7 +50,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        database databaseHelper = new database(context);
+        MyDbHelper myDbHelperHelper = new MyDbHelper(context);
         TasksData item = data.get(position);
 
         int taskId = item.id;
@@ -70,7 +68,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
         // -------------------------------
         // 1. If task is completed -> GREEN background only
         // -------------------------------
-        if (databaseHelper.getStatus(taskId) == 1) {
+        if (myDbHelperHelper.getStatus(taskId) == 1) {
             holder.markCompleteButton.setVisibility(View.GONE);
             holder.taskstatus.setText("Completed");
             holder.taskstatus.setTextColor(
@@ -111,7 +109,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
         // DELETE USING ID
         holder.deleteButton.setOnClickListener(v -> {
 
-            boolean deleted = databaseHelper.deleteData(taskId);
+            boolean deleted = myDbHelperHelper.deleteData(taskId);
 
             if (deleted) {
 
@@ -144,7 +142,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
                     .trim();
 
             callUpdateDialog(
-                    databaseHelper,
+                    myDbHelperHelper,
                     taskId,
                     updatedTitle,
                     updatedTime
@@ -154,7 +152,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
         // MARK COMPLETE
         holder.markCompleteButton.setOnClickListener(v -> {
 
-            boolean completed = databaseHelper.setComplete(taskId, 1);
+            boolean completed = myDbHelperHelper.setComplete(taskId, 1);
 
             if (completed) {
                 Toast.makeText(context, "Task marked complete", Toast.LENGTH_SHORT).show();
@@ -165,7 +163,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
         });
     }
 
-    private void callUpdateDialog(database databaseHelper,
+    private void callUpdateDialog(MyDbHelper myDbHelperHelper,
                                   int taskId,
                                   String updatedTitle,
                                   String updatedTime) {
@@ -224,7 +222,7 @@ public class TODOAdapter extends RecyclerView.Adapter<TODOAdapter.ViewHolder> {
 
         updateBtn.setOnClickListener(v -> {
 
-            boolean updated = databaseHelper.updateData(
+            boolean updated = myDbHelperHelper.updateData(
                     taskId,
                     "Task " + taskId,
                     taskTitle.getText().toString().trim(),

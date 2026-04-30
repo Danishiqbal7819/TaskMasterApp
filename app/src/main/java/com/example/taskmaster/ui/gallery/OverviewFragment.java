@@ -14,7 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.database;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class OverviewFragment extends Fragment {
             return;
         }
 
-        List<TasksData> tasks = new database(getContext()).getData();
+        List<TasksData> tasks = new MyDbHelper(getContext()).getData();
         int recentCount = Math.min(tasks.size(), taskCards.length);
         emptyRecentView.setVisibility(recentCount == 0 ? View.VISIBLE : View.GONE);
 

@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.example.taskmaster.ui.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +11,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.taskmaster.R;
 import com.example.taskmaster.databinding.ActivityNavdrawerBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-public class TaskDashboardActivity extends AppCompatActivity {
+public class TaskDashboardActivity extends BaseActivity {
 
     private AppBarConfiguration appBarConfiguration;
 

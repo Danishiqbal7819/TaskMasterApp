@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.database;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        database databaseHelper = new database(context);
+        MyDbHelper myDbHelperHelper = new MyDbHelper(context);
         TasksData item = data.get(position);
 
         int taskId = item.id;

@@ -1,4 +1,4 @@
-package com.example.taskmaster;
+package com.example.taskmaster.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -9,7 +9,10 @@ import android.os.Looper;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-public class SplashActivity extends AppCompatActivity {
+
+import com.example.taskmaster.R;
+
+public class SplashActivity extends BaseActivity {
 
     private TextView text;
     private final Handler splashHandler = new Handler(Looper.getMainLooper());

@@ -13,7 +13,7 @@ import com.example.taskmaster.Model.TasksData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class database extends SQLiteOpenHelper {
+public class MyDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "todoDatabase";
     private static final int DB_VERSION = 2;
@@ -21,11 +21,11 @@ public class database extends SQLiteOpenHelper {
 
     private static Context context;
 
-    public database(@Nullable Context context) {
+    public MyDbHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
 
         if (context != null) {
-            database.context = context.getApplicationContext();
+            MyDbHelper.context = context.getApplicationContext();
         }
     }
 
@@ -44,7 +44,7 @@ public class database extends SQLiteOpenHelper {
     }
 
     public static Context getAppContext() {
-        return database.context;
+        return MyDbHelper.context;
     }
 
     @Override

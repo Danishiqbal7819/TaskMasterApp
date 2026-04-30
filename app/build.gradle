@@ -13,10 +13,73 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    flavorDimensions "environment", "mode"
+
+    productFlavors {
+
+        // Environment flavors
+        prod {
+            dimension "environment"
+
+            buildConfigField "String", "ENV", "\"PROD\""
+            versionNameSuffix "prod_"
+        }
+
+        uat {
+            dimension "environment"
+
+            buildConfigField "String", "ENV", "\"UAT\""
+            versionNameSuffix "uat_"
+        }
+
+        // Mode flavors
+        _pinned_ {
+            dimension "mode"
+
+            buildConfigField "String", "APP_MODE", "\"P\""
+            versionNameSuffix "pinned_"
+        }
+
+        _unpinned_ {
+            dimension "mode"
+
+            buildConfigField "String", "APP_MODE", "\"U\""
+            versionNameSuffix "unpinned_"
+        }
+    }
+
     buildTypes {
+        debug {
+            debuggable true
+            versionNameSuffix "debug"
+        }
+
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+
+        def buildType = variant.buildType.name
+        def env = ""
+        def mode = ""
+
+        variant.productFlavors.each { flavor ->
+            if (flavor.dimension == "environment") {
+                env = flavor.name.toUpperCase()
+            }
+            if (flavor.dimension == "mode") {
+                mode = flavor.name == "pinned" ? "P" : "U"
+            }
+        }
+
+        def formattedDate = new Date().format("ddMMMyyyy-HHmm")
+
+        variant.outputs.all {
+            outputFileName = "taskmaster_${env.toLowerCase()}_${mode}_${formattedDate}.apk"
         }
     }
     compileOptions {
@@ -26,6 +89,7 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        buildConfig true
     }
 }
 dependencies {

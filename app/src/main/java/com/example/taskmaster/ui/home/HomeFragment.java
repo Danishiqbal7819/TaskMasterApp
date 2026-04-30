@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmaster.Adapter.TaskAdapter;
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.database;
+import com.example.taskmaster.Utils.MyDbHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
     private TextView nextTimeView;
     private TextView focusTaskView;
     private TextView focusDetailView;
-    private database databasehelper;
+    private MyDbHelper databasehelper;
     private RecyclerView completedTaskRecycler;
     private TextView completedTaskCount;
     private TextView tvtodayquotes;
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
         focusTaskView = view.findViewById(R.id.homeFocusTask);
         focusDetailView = view.findViewById(R.id.homeFocusDetail);
         tvtodayquotes = view.findViewById(R.id.tvtodayquotes);
-        databasehelper=new database(getContext());
+        databasehelper=new MyDbHelper(getContext());
         completedTaskRecycler=view.findViewById(R.id.completedTaskRecycler);
         completedTaskCount=view.findViewById(R.id.completedTaskCount);
     }
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        List<TasksData> tasks = new database(getContext()).getData();
+        List<TasksData> tasks = new MyDbHelper(getContext()).getData();
         int taskCount = tasks.size();
         taskCountView.setText(String.valueOf(taskCount));
 
