@@ -12,11 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.MyDbHelper;
+import com.example.taskmaster.ViewModel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +32,7 @@ public class AddTaskFragment extends Fragment {
     private TextView taskTimeView;
     private Button saveButton;
     private Button openListButton;
-    private MyDbHelper myDbHelperHelper;
+    private TaskViewModel viewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -39,13 +41,21 @@ public class AddTaskFragment extends Fragment {
         initView(view);
         initClick(view);
         clearInputs();
-        setdata();
         return view;
     }
 
-    private void setdata() {
-        int size = myDbHelperHelper.getData().size();
-        taskNumberInput.setText("Task " + String.valueOf(size + 1));
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        observeViewModel();
+    }
+
+    private void observeViewModel() {
+        viewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
+            int size = tasks.size();
+            taskNumberInput.setText("Task " + (size + 1));
+        });
     }
 
     private void initView(View view) {
@@ -54,7 +64,6 @@ public class AddTaskFragment extends Fragment {
         taskTimeView = view.findViewById(R.id.tasktime);
         saveButton = view.findViewById(R.id.buttoninsert);
         openListButton = view.findViewById(R.id.buttonOpenList);
-        myDbHelperHelper = new MyDbHelper(requireContext());
     }
 
     private void initClick(View view) {
@@ -65,7 +74,7 @@ public class AddTaskFragment extends Fragment {
                 return;
             }
 
-            boolean inserted = myDbHelperHelper.insertData(
+            boolean inserted = viewModel.insertTask(
                     valueOf(taskNumberInput),
                     valueOf(taskTitleInput),
                     valueOf(taskTimeView)
@@ -103,7 +112,6 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void clearInputs() {
-//        taskNumberInput.setText("");
         taskTitleInput.setText("");
         taskTimeView.setText(R.string.add_task_time_hint);
         taskTimeView.setTextColor(requireContext().getColor(R.color.text_secondary));
@@ -114,9 +122,7 @@ public class AddTaskFragment extends Fragment {
     }
 
     private void setTime() {
-
         Calendar calendar = Calendar.getInstance();
-
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -124,13 +130,10 @@ public class AddTaskFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-
                     TimePickerDialog timePickerDialog = new TimePickerDialog(
                             getContext(),
                             (timeView, selectedHour, selectedMinute) -> {
-
                                 String amPm = (selectedHour >= 12) ? "PM" : "AM";
-
                                 int formattedHour = selectedHour % 12;
                                 if (formattedHour == 0) formattedHour = 12;
 
@@ -147,7 +150,6 @@ public class AddTaskFragment extends Fragment {
                                                 + "  " + formattedTime;
 
                                 try {
-
                                     SimpleDateFormat sdf =
                                             new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault());
 
@@ -155,7 +157,6 @@ public class AddTaskFragment extends Fragment {
                                     Date currentDate = new Date();
 
                                     if (selectedDate != null && selectedDate.before(currentDate)) {
-
                                         taskTimeView.setText("");
                                         taskTimeView.setHint("Deadline");
                                         Toast.makeText(getContext(),
@@ -164,26 +165,21 @@ public class AddTaskFragment extends Fragment {
                                     } else {
                                         taskTimeView.setText(selectedDateTime);
                                     }
-
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     taskTimeView.setText("");
                                 }
-
                             },
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE),
                             false
                     );
-
                     timePickerDialog.show();
-
                 },
                 year,
                 month,
                 day
         );
-
         datePickerDialog.show();
     }
 }

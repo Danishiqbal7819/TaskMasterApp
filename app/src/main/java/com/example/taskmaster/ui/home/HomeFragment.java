@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmaster.Adapter.TaskAdapter;
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.MyDbHelper;
+import com.example.taskmaster.ViewModel.TaskViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +30,7 @@ public class HomeFragment extends Fragment {
     private TextView nextTimeView;
     private TextView focusTaskView;
     private TextView focusDetailView;
-    private MyDbHelper databasehelper;
+    private TaskViewModel viewModel;
     private RecyclerView completedTaskRecycler;
     private TextView completedTaskCount;
     private TextView tvtodayquotes;
@@ -40,23 +42,33 @@ public class HomeFragment extends Fragment {
 
         initView(view);
         initClick(view);
-        bindTaskSummary();
-        setData();
-
+        
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        
+        observeViewModel();
+    }
+
+    private void observeViewModel() {
+        viewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
+            bindTaskSummary(tasks);
+        });
+
+        viewModel.getCompletedTasks().observe(getViewLifecycleOwner(), tasks -> {
+            completedTaskCount.setText(tasks.size() + " Completed");
+            completedTaskRecycler.setAdapter(
+                    new TaskAdapter(this.getContext(), new ArrayList<>(tasks), "Completed", () -> viewModel.refreshTasks()));
+        });
     }
 
     private void setData() {
         tvtodayquotes.setText(getTodayQuote());
-        ArrayList<TasksData> completedTasks =
-                databasehelper.getAllCompletedTasks();
-        completedTaskCount.setText(completedTasks.size()+" Completed");
-        completedTaskRecycler.setLayoutManager(
-                new LinearLayoutManager(getContext())
-        );
-
-        completedTaskRecycler.setAdapter(
-                new TaskAdapter(this.getContext(),completedTasks,"Completed",this::bindTaskSummary));
+        // Data loading is now handled by LiveData observation
     }
 
     private void initClick(View view) {
@@ -76,17 +88,17 @@ public class HomeFragment extends Fragment {
         focusTaskView = view.findViewById(R.id.homeFocusTask);
         focusDetailView = view.findViewById(R.id.homeFocusDetail);
         tvtodayquotes = view.findViewById(R.id.tvtodayquotes);
-        databasehelper=new MyDbHelper(getContext());
-        completedTaskRecycler=view.findViewById(R.id.completedTaskRecycler);
-        completedTaskCount=view.findViewById(R.id.completedTaskCount);
+        tvtodayquotes.setText(getTodayQuote());
+        completedTaskRecycler = view.findViewById(R.id.completedTaskRecycler);
+        completedTaskRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        completedTaskCount = view.findViewById(R.id.completedTaskCount);
     }
 
-    private void bindTaskSummary() {
-        if (getContext() == null) {
+    private void bindTaskSummary(List<TasksData> tasks) {
+        if (getContext() == null || tasks == null) {
             return;
         }
 
-        List<TasksData> tasks = new MyDbHelper(getContext()).getData();
         int taskCount = tasks.size();
         taskCountView.setText(String.valueOf(taskCount));
 
@@ -125,8 +137,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        bindTaskSummary();
+        if (viewModel != null) {
+            viewModel.refreshTasks();
+        }
     }
+
     private final String[] quotes = new String[]{
             "Today is a fresh start. Make it count.",
             "Small steps today lead to big results tomorrow.",
@@ -139,14 +154,11 @@ public class HomeFragment extends Fragment {
             "Make today so productive that yesterday gets jealous.",
             "Stay focused. Stay consistent. Stay moving."
     };
+
     private String getTodayQuote() {
-
         Calendar calendar = Calendar.getInstance();
-
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-
         int index = dayOfYear % quotes.length;
-
         return quotes[index];
     }
 }

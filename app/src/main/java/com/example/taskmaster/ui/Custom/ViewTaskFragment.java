@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,7 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.taskmaster.Adapter.TODOAdapter;
 import com.example.taskmaster.Model.TasksData;
 import com.example.taskmaster.R;
-import com.example.taskmaster.Utils.MyDbHelper;
+import com.example.taskmaster.ViewModel.TaskViewModel;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class ViewTaskFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private TextView emptyStateText;
-    private MyDbHelper myDbHelperHelper;
+    private TaskViewModel viewModel;
     private TODOAdapter todoAdapter;
     private TextView filterAll;
     private TextView filterCompleted;
@@ -32,16 +34,29 @@ public class ViewTaskFragment extends Fragment {
     private TextView filterOverdue;
     private String currentFilter = "ALL";
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.viewtaskfragment, container, false);
         initView(view);
         setupRecyclerView();
-//        loadTasks();
-        // Click listeners for filters
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        observeViewModel();
+        
+        // Initial load based on arguments or default
+        if (getArguments() != null) {
+            String filterType = getArguments().getString("filter_type");
+            if (filterType != null) {
+                currentFilter = filterType;
+            }
+        }
+        applyCurrentFilter();
     }
 
     private void initView(View view) {
@@ -53,200 +68,109 @@ public class ViewTaskFragment extends Fragment {
         filterCompleted = view.findViewById(R.id.filterCompleted);
         filterPending = view.findViewById(R.id.filterPending);
         filterOverdue = view.findViewById(R.id.filterOverdue);
-        myDbHelperHelper = new MyDbHelper(requireContext());
-
-        currentFilter = "ALL";
-        updateSelectedFilter(filterAll);
-        loadTasks(myDbHelperHelper.getData());
 
         filterAll.setOnClickListener(v -> {
             currentFilter = "ALL";
-            updateSelectedFilter(filterAll);
-            loadTasks(myDbHelperHelper.getData());
+            applyCurrentFilter();
         });
 
         filterCompleted.setOnClickListener(v -> {
             currentFilter = "COMPLETED";
-            updateSelectedFilter(filterCompleted);
-            loadTasks(myDbHelperHelper.getAllCompletedTasks());
+            applyCurrentFilter();
         });
 
         filterPending.setOnClickListener(v -> {
             currentFilter = "PENDING";
-            updateSelectedFilter(filterPending);
-            loadTasks(myDbHelperHelper.getPendingTasks());
+            applyCurrentFilter();
         });
 
         filterOverdue.setOnClickListener(v -> {
             currentFilter = "OVERDUE";
-            updateSelectedFilter(filterOverdue);
-            loadTasks(myDbHelperHelper.getOverdueTasks());
+            applyCurrentFilter();
         });
     }
 
-    private void setupRecyclerView() {
+    private void observeViewModel() {
+        viewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
+            if ("ALL".equals(currentFilter)) {
+                updateUI(tasks);
+            }
+        });
 
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(
-                        getContext(),
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
-        );
+        viewModel.getCompletedTasks().observe(getViewLifecycleOwner(), tasks -> {
+            if ("COMPLETED".equals(currentFilter)) {
+                updateUI(tasks);
+            }
+        });
 
-        if (getArguments() != null) {
+        viewModel.getPendingTasks().observe(getViewLifecycleOwner(), tasks -> {
+            if ("PENDING".equals(currentFilter)) {
+                updateUI(tasks);
+            }
+        });
 
-            String filterType =
-                    getArguments().getString("filter_type");
+        viewModel.getOverdueTasks().observe(getViewLifecycleOwner(), tasks -> {
+            if ("OVERDUE".equals(currentFilter)) {
+                updateUI(tasks);
+            }
+        });
+    }
 
-            if ("COMPLETED".equals(filterType)) {
-
-                currentFilter = "COMPLETED";
+    private void applyCurrentFilter() {
+        switch (currentFilter) {
+            case "COMPLETED":
                 updateSelectedFilter(filterCompleted);
-                loadTasks(myDbHelperHelper.getAllCompletedTasks());
-
-            } else if ("PENDING".equals(filterType)) {
-
-                currentFilter = "PENDING";
+                break;
+            case "PENDING":
                 updateSelectedFilter(filterPending);
-                loadTasks(myDbHelperHelper.getPendingTasks());
-
-            } else if ("OVERDUE".equals(filterType)) {
-
-                currentFilter = "OVERDUE";
+                break;
+            case "OVERDUE":
                 updateSelectedFilter(filterOverdue);
-                loadTasks(myDbHelperHelper.getOverdueTasks());
-
-            } else {
-
+                break;
+            default:
                 currentFilter = "ALL";
                 updateSelectedFilter(filterAll);
-                loadTasks(myDbHelperHelper.getData());
-            }
-
-        } else {
-
-            currentFilter = "ALL";
-            updateSelectedFilter(filterAll);
-            loadTasks(myDbHelperHelper.getData());
+                break;
         }
+        viewModel.refreshTasks();
+    }
 
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setOnRefreshListener(() -> {
-
-            switch (currentFilter) {
-
-                case "COMPLETED":
-                    loadTasks(myDbHelperHelper.getAllCompletedTasks());
-                    break;
-
-                case "PENDING":
-                    loadTasks(myDbHelperHelper.getPendingTasks());
-                    break;
-
-                case "OVERDUE":
-                    loadTasks(myDbHelperHelper.getOverdueTasks());
-                    break;
-
-                default:
-                    loadTasks(myDbHelperHelper.getData());
-                    break;
-            }
-
+            viewModel.refreshTasks();
             swipeRefreshLayout.setRefreshing(false);
         });
     }
 
-//    private void loadTasks() {
-//        List<TasksData> data = databaseHelper.getData();
-//        todoAdapter = new TODOAdapter(requireContext(), data, this::loadTasks);
-//        recyclerView.setAdapter(todoAdapter);
-//        emptyStateText.setVisibility(data.isEmpty() ? View.VISIBLE : View.GONE);
-//        swipeRefreshLayout.setVisibility(data.isEmpty() ? View.GONE : View.VISIBLE);
-//    }
-private void updateSelectedFilter(TextView selectedView) {
+    private void updateSelectedFilter(TextView selectedView) {
+        filterAll.setBackgroundResource(R.drawable.bg_surface_card);
+        filterCompleted.setBackgroundResource(R.drawable.bg_surface_card);
+        filterPending.setBackgroundResource(R.drawable.bg_surface_card);
+        filterOverdue.setBackgroundResource(R.drawable.bg_surface_card);
 
-    // Reset all filters to default style
-    filterAll.setBackgroundResource(R.drawable.bg_surface_card);
-    filterCompleted.setBackgroundResource(R.drawable.bg_surface_card);
-    filterPending.setBackgroundResource(R.drawable.bg_surface_card);
-    filterOverdue.setBackgroundResource(R.drawable.bg_surface_card);
+        filterAll.setTextColor(requireContext().getColor(R.color.text_primary));
+        filterCompleted.setTextColor(requireContext().getColor(R.color.text_primary));
+        filterPending.setTextColor(requireContext().getColor(R.color.text_primary));
+        filterOverdue.setTextColor(requireContext().getColor(R.color.text_primary));
 
-    filterAll.setTextColor(requireContext().getColor(R.color.text_primary));
-    filterCompleted.setTextColor(requireContext().getColor(R.color.text_primary));
-    filterPending.setTextColor(requireContext().getColor(R.color.text_primary));
-    filterOverdue.setTextColor(requireContext().getColor(R.color.text_primary));
-
-    // Highlight selected filter
-    selectedView.setBackgroundResource(R.drawable.bg_chip_blue);
-    selectedView.setTextColor(
-            requireContext().getColor(R.color.colorPrimarydark)
-    );
-}
-    private void reloadCurrentFilter() {
-
-        switch (currentFilter) {
-
-            case "COMPLETED":
-                loadTasks(myDbHelperHelper.getAllCompletedTasks());
-                updateSelectedFilter(filterCompleted);
-                break;
-
-            case "PENDING":
-                loadTasks(myDbHelperHelper.getPendingTasks());
-                updateSelectedFilter(filterPending);
-                break;
-
-            case "OVERDUE":
-                loadTasks(myDbHelperHelper.getOverdueTasks());
-                updateSelectedFilter(filterOverdue);
-                break;
-
-            default:
-                loadTasks(myDbHelperHelper.getData());
-                updateSelectedFilter(filterAll);
-                break;
-        }
+        selectedView.setBackgroundResource(R.drawable.bg_chip_blue);
+        selectedView.setTextColor(requireContext().getColor(R.color.colorPrimarydark));
     }
-    private void loadTasks(List<TasksData> data) {
 
-        todoAdapter = new TODOAdapter(
-                requireContext(),
-                data,
-                this::reloadCurrentFilter
-        );
-
+    private void updateUI(List<TasksData> data) {
+        todoAdapter = new TODOAdapter(requireContext(), data, () -> viewModel.refreshTasks());
         recyclerView.setAdapter(todoAdapter);
 
-        emptyStateText.setVisibility(
-                data.isEmpty() ? View.VISIBLE : View.GONE
-        );
-
-        swipeRefreshLayout.setVisibility(
-                data.isEmpty() ? View.GONE : View.VISIBLE
-        );
+        emptyStateText.setVisibility(data.isEmpty() ? View.VISIBLE : View.GONE);
+        swipeRefreshLayout.setVisibility(data.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        switch (currentFilter) {
-
-            case "COMPLETED":
-                loadTasks(myDbHelperHelper.getAllCompletedTasks());
-                break;
-
-            case "PENDING":
-                loadTasks(myDbHelperHelper.getPendingTasks());
-                break;
-
-            case "OVERDUE":
-                loadTasks(myDbHelperHelper.getOverdueTasks());
-                break;
-
-            default:
-                loadTasks(myDbHelperHelper.getData());
-                break;
+        if (viewModel != null) {
+            viewModel.refreshTasks();
         }
     }
 }
