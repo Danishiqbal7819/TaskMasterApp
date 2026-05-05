@@ -34,7 +34,7 @@ TaskMaster is a simple and efficient **task management Android application** des
 </p>
 ## 📥 Download APK
 
-👉 [⬇️ Download TaskMaster App](YOUR_APK_LINK_HERE)
+👉 [⬇️ Download TaskMaster App](https://github.com/Danishiqbal7819/TaskMasterApp/releases/download/v1.0/taskmaster_prod_U_05May2026-1800.apk)
 
 > ⚠️ Enable "Install from Unknown Sources" before installing the APK
 
