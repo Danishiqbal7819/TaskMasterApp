@@ -25,18 +25,13 @@ TaskMaster is a simple and efficient **task management Android application** des
 * SQLite / Room Database
 * Material Design Components
 
----
-
-## 📱 Screenshots
+## 📱 Screenshots  
 
 <p align="center">
-  <img src="images/home_page.jpg" width="250"/>
-  <img src="images/View_task.jpg" width="250"/>
-  <img src="images/add task.jpg" width="250"/>
+  <img src="home_page.jpg" width="250"/>
+  <img src="View_task.jpg" width="250"/>
+  <img src="add_task.jpg" width="250"/>
 </p>
-
----
-
 ## 📥 Download APK
 
 👉 [⬇️ Download TaskMaster App](YOUR_APK_LINK_HERE)
