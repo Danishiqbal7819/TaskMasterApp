@@ -30,7 +30,7 @@ TaskMaster is a simple and efficient **task management Android application** des
 <p align="center">
   <img src="home_page.jpg" width="250"/>
   <img src="View_task.jpg" width="250"/>
-  <img src="add_task.jpg" width="250"/>
+  <img src="add task.jpg" width="250"/>
 </p>
 ## 📥 Download APK
 
